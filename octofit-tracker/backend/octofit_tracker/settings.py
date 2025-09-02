@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -25,13 +25,11 @@ SECRET_KEY = 'django-insecure-3lsss#29!_i7i__h*ym1h^3s%$5s!sm%snc!3i$p!lq2$k47p-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-import os
-
-codespace_name = os.environ.get("CODESPACE_NAME")
-codespace_host = f"{codespace_name}-8000.app.github.dev" if codespace_name else None
+# Permitir localhost, 127.0.0.1 y el dominio de codespace si existe
+CODESPACE_NAME = os.environ.get('CODESPACE_NAME')
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-if codespace_host:
-    ALLOWED_HOSTS.append(codespace_host)
+if CODESPACE_NAME:
+    ALLOWED_HOSTS.append(f'{CODESPACE_NAME}-8000.app.github.dev')
 
 
 # Application definition
@@ -134,11 +132,20 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+
 # CORS settings
+import os
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
+
+# Permitir el origen del frontend codespace
+codespace_name = os.environ.get("CODESPACE_NAME")
+if codespace_name:
+    CORS_ALLOWED_ORIGINS = [
+        f"https://{codespace_name}-3000.app.github.dev"
+    ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

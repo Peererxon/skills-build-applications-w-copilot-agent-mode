@@ -54,4 +54,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('', api_root, name='api-root'),
+        # Endpoints REST siguiendo el formato /api/[component]/
+        path('api/activities/', include('octofit_tracker.activities.urls') if 'octofit_tracker.activities' in globals() else lambda request: None),
+        path('api/workouts/', include('octofit_tracker.workouts.urls') if 'octofit_tracker.workouts' in globals() else lambda request: None),
+        # Agrega aquí otros endpoints siguiendo el formato /api/[component]/
 ]
